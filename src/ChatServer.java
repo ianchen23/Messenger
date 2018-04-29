@@ -24,6 +24,10 @@ public class ChatServer {
         }
     }
 
+    public static void main(String[] args) throws IOException {
+        ChatServer server = new ChatServer();
+    }
+
     class AcceptClient extends Thread {
         Socket ClientSocket;
         DataInputStream din;
