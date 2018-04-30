@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +13,8 @@ public class ChatClient extends JFrame implements Runnable {
     
     Socket socket;
     JTextArea ta;
+    JButton send, logout;
+    JTextField tf;
     
     Thread thread;
     
@@ -24,7 +28,35 @@ public class ChatClient extends JFrame implements Runnable {
         LoginName = login;
         
         ta = new JTextArea(18,50);
-        
+        tf = new JTextField(50);
+
+        send = new JButton("Sent");
+        logout = new JButton("Logout");
+
+        send.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    dout.writeUTF(LoginName + " DATA " + tf.getText().toString());
+                    tf.setText("");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    dout.writeUTF(LoginName + " " + "LOGOUT");
+                    System.exit(1);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
         socket = new Socket("localhost", 5217);
         
         din = new DataInputStream(socket.getInputStream());
@@ -44,6 +76,9 @@ public class ChatClient extends JFrame implements Runnable {
         JPanel panel = new JPanel();
 
         panel.add(new JScrollPane(ta));
+        panel.add(tf);
+        panel.add(send);
+        panel.add(logout);
 
         add(panel);
 
@@ -62,6 +97,6 @@ public class ChatClient extends JFrame implements Runnable {
     }
 
     public static void main(String[] args) throws IOException {
-        ChatClient client = new ChatClient("User21");
+        ChatClient client = new ChatClient("User12");
     }
 }
