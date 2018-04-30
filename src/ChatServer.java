@@ -84,6 +84,7 @@ public class ChatServer {
                             pOut.writeUTF(LoginName + ": " + msg);
                         }
                     }
+                    if (MsgType.equals("LOGOUT")) break;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
